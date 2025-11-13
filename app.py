@@ -43,6 +43,24 @@ def register_user():
 
 	return "Registration Successful!!"
 
+@app.route('/login', methods=['GET'])
+def login_form():
+	return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login_user():
+	email = request.form.get('email')
+	password = request.form.get('password')
+
+	user = User.query.filter_by(email=email).first()
+
+	if not user:
+		return "User not found"
+	if user.password_hash != password:
+		return "Incorrect Password"
+
+	return "Login Successful!"
+
 
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", port=5000)
