@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package location;
+
+service LocationService {
+    rpc IsNearby(ProximityRequest) returns (ProximityResponse);
+    rpc CalculateDistance(DistanceRequest) returns (DistanceResponse);
+}
+
+message ProximityRequest {
+    double lat1 = 1;
+    double lng1 = 2;
+    double lat2 = 3;
+    double lng2 = 4;
+    double threshold_meters = 5; // Default 100m
+}
+
+message ProximityResponse {
+    bool is_nearby = 1;
+    double distance_meters = 2;
+}
+
+message DistanceRequest {
+    double lat1 = 1;
+    double lng1 = 2;
+    double lat2 = 3;
+    double lng2 = 4;
+}
+
+message DistanceResponse {
+    double distance_meters = 1;
+}
+

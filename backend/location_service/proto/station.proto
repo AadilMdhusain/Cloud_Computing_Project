@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package station;
+
+service StationService {
+    rpc CreateStation(CreateStationRequest) returns (StationResponse);
+    rpc GetStation(GetStationRequest) returns (StationResponse);
+    rpc ListStations(ListStationsRequest) returns (StationListResponse);
+    rpc GetStationsByIds(StationIdsRequest) returns (StationListResponse);
+}
+
+message CreateStationRequest {
+    string name = 1;
+    double latitude = 2;
+    double longitude = 3;
+}
+
+message GetStationRequest {
+    int32 station_id = 1;
+}
+
+message ListStationsRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+}
+
+message StationIdsRequest {
+    repeated int32 station_ids = 1;
+}
+
+message StationResponse {
+    bool success = 1;
+    int32 station_id = 2;
+    string name = 3;
+    double latitude = 4;
+    double longitude = 5;
+    string message = 6;
+}
+
+message StationListResponse {
+    bool success = 1;
+    repeated StationResponse stations = 2;
+    int32 total = 3;
+}
+

@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package driver;
+
+service DriverService {
+    rpc CreateDriver(CreateDriverRequest) returns (DriverResponse);
+    rpc GetDriver(GetDriverRequest) returns (DriverResponse);
+    rpc UpdateDriverLocation(UpdateLocationRequest) returns (DriverResponse);
+    rpc UpdateDriverRoute(UpdateRouteRequest) returns (DriverResponse);
+    rpc StartSimulation(StartSimulationRequest) returns (SimulationResponse);
+    rpc StopSimulation(StopSimulationRequest) returns (SimulationResponse);
+}
+
+message Coordinate {
+    double latitude = 1;
+    double longitude = 2;
+}
+
+message CreateDriverRequest {
+    int32 user_id = 1;
+    int32 free_seats = 2;
+    repeated Coordinate route = 3;
+}
+
+message GetDriverRequest {
+    int32 driver_id = 1;
+}
+
+message UpdateLocationRequest {
+    int32 driver_id = 1;
+    double latitude = 2;
+    double longitude = 3;
+}
+
+message UpdateRouteRequest {
+    int32 driver_id = 1;
+    int32 station_id = 2;
+    double station_lat = 3;
+    double station_lng = 4;
+    string action = 5; // "PUSH_FRONT" to add station to front of queue
+}
+
+message StartSimulationRequest {
+    int32 driver_id = 1;
+}
+
+message StopSimulationRequest {
+    int32 driver_id = 1;
+}
+
+message DriverResponse {
+    bool success = 1;
+    int32 driver_id = 2;
+    int32 user_id = 3;
+    double current_lat = 4;
+    double current_lng = 5;
+    int32 free_seats = 6;
+    repeated Coordinate route_queue = 7;
+    string sim_timestamp = 8;
+    int32 matched_station_id = 9;
+    string message = 10;
+}
+
+message SimulationResponse {
+    bool success = 1;
+    string message = 2;
+}
+

@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: trip-service
+  namespace: lastmile
+spec:
+  selector:
+    app: trip-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8008
+      targetPort: 8008
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trip-service
+  namespace: lastmile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trip-service
+  template:
+    metadata:
+      labels:
+        app: trip-service
+    spec:
+      containers:
+      - name: trip-service
+        image: backend-trip_service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8008
+        env:
+        - name: DB_HOST
+          value: "postgres-trip"
+        - name: DB_NAME
+          value: "trip_db"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASSWORD
+          value: "postgres"
+        - name: RABBITMQ_URL
+          value: "amqp://guest:guest@rabbitmq:5672/"
+        - name: NOTIFICATION_SERVICE_HOST
+          value: "notification-service"
+        - name: NOTIFICATION_SERVICE_PORT
+          value: "8007"
+        - name: MATCHING_SERVICE_HOST
+          value: "matching-service"
+        - name: MATCHING_SERVICE_PORT
+          value: "8005"
+        - name: DRIVER_SERVICE_HOST
+          value: "driver-service"
+        - name: DRIVER_SERVICE_PORT
+          value: "8004"

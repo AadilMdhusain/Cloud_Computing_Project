@@ -1,0 +1,285 @@
+services:
+  # PostgreSQL Databases
+  db_user:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+
+  db_station:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: station_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - station_db_data:/var/lib/postgresql/data
+
+  db_rider:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: rider_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - rider_db_data:/var/lib/postgresql/data
+
+  db_driver:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: driver_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - driver_db_data:/var/lib/postgresql/data
+
+  db_matching:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: matching_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - matching_db_data:/var/lib/postgresql/data
+
+  db_trip:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: trip_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5437:5432"
+    volumes:
+      - trip_db_data:/var/lib/postgresql/data
+
+  db_notification:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5438:5432"
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  # User Service
+  user_service:
+    build:
+      context: ./user_service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+      - "50051:50051"
+    environment:
+      - DB_HOST=db_user
+      - DB_PORT=5432
+      - DB_NAME=user_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=user_service.settings
+    depends_on:
+      - db_user
+
+  # Station Service
+  station_service:
+    build:
+      context: ./station_service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+      - "50052:50052"
+    environment:
+      - DB_HOST=db_station
+      - DB_PORT=5432
+      - DB_NAME=station_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=station_service.settings
+    depends_on:
+      - db_station
+
+  # Rider Service
+  rider_service:
+    build:
+      context: ./rider_service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+      - "50053:50053"
+    environment:
+      - DB_HOST=db_rider
+      - DB_PORT=5432
+      - DB_NAME=rider_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=rider_service.settings
+    depends_on:
+      - db_rider
+
+  # Driver Service
+  driver_service:
+    build:
+      context: ./driver_service
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+      - "50054:50054"
+    environment:
+      - DB_HOST=db_driver
+      - DB_PORT=5432
+      - DB_NAME=driver_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=driver_service.settings
+      - RABBITMQ_URL=amqp://admin:admin@rabbitmq:5672/
+      - LOCATION_SERVICE_HOST=location_service
+      - LOCATION_SERVICE_PORT=50056
+      - STATION_SERVICE_HOST=station_service
+      - STATION_SERVICE_PORT=50052
+    depends_on:
+      - db_driver
+      - rabbitmq
+
+  # Driver Simulator Worker
+  driver_simulator:
+    build:
+      context: ./driver_service
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=db_driver
+      - DB_PORT=5432
+      - DB_NAME=driver_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=driver_service.settings
+      - RABBITMQ_URL=amqp://admin:admin@rabbitmq:5672/
+      - LOCATION_SERVICE_HOST=location_service
+      - LOCATION_SERVICE_PORT=50056
+      - STATION_SERVICE_HOST=station_service
+      - STATION_SERVICE_PORT=50052
+      - TRIP_SERVICE_HOST=trip_service
+      - TRIP_SERVICE_PORT=8008
+    depends_on:
+      - db_driver
+      - rabbitmq
+      - trip_service
+      - driver_service
+    command: python simulator_worker.py
+
+  # Matching Service
+  matching_service:
+    build:
+      context: ./matching_service
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8005"
+      - "50055:50055"
+    environment:
+      - DB_HOST=db_matching
+      - DB_PORT=5432
+      - DB_NAME=matching_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=matching_service.settings
+      - RABBITMQ_URL=amqp://admin:admin@rabbitmq:5672/
+      - RIDER_SERVICE_HOST=rider_service
+      - RIDER_SERVICE_PORT=50053
+      - DRIVER_SERVICE_HOST=driver_service
+      - DRIVER_SERVICE_PORT=50054
+      - TRIP_SERVICE_HOST=trip_service
+      - TRIP_SERVICE_PORT=8008
+    depends_on:
+      - db_matching
+      - rabbitmq
+      - trip_service
+
+  # Location Service
+  location_service:
+    build:
+      context: ./location_service
+      dockerfile: Dockerfile
+    ports:
+      - "50056:50056"
+    environment:
+      - DJANGO_SETTINGS_MODULE=location_service.settings
+    command: python grpc_server.py
+
+  # Trip Service
+  trip_service:
+    build:
+      context: ./trip_service
+      dockerfile: Dockerfile
+    ports:
+      - "8008:8008"
+    environment:
+      - DB_HOST=db_trip
+      - DB_PORT=5432
+      - DB_NAME=trip_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=trip_service.settings
+      - NOTIFICATION_SERVICE_HOST=notification_service
+      - NOTIFICATION_SERVICE_PORT=8007
+      - DRIVER_SERVICE_HOST=driver_service
+      - DRIVER_SERVICE_PORT=8004
+      - MATCHING_SERVICE_HOST=matching_service
+      - MATCHING_SERVICE_PORT=8005
+    depends_on:
+      - db_trip
+      - notification_service
+      - driver_service
+
+  # Notification Service
+  notification_service:
+    build:
+      context: ./notification_service
+      dockerfile: Dockerfile
+    ports:
+      - "8007:8007"
+    environment:
+      - DB_HOST=db_notification
+      - DB_PORT=5432
+      - DB_NAME=notification_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=notification_service.settings
+    depends_on:
+      - db_notification
+
+volumes:
+  user_db_data:
+  station_db_data:
+  rider_db_data:
+  driver_db_data:
+  matching_db_data:
+  trip_db_data:
+  notification_db_data:
+  rabbitmq_data:
+

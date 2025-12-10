@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: location-service
+  namespace: lastmile
+spec:
+  selector:
+    app: location-service
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 50056
+      targetPort: 50056
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: location-service
+  namespace: lastmile
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: location-service
+  template:
+    metadata:
+      labels:
+        app: location-service
+    spec:
+      containers:
+      - name: location-service
+        image: backend-location_service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 50056
+          name: grpc
+

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package rider;
+
+service RiderService {
+    rpc CreateRideRequest(CreateRideRequestMessage) returns (RideResponse);
+    rpc GetRideRequest(GetRideRequestMessage) returns (RideResponse);
+    rpc UpdateRideStatus(UpdateRideStatusMessage) returns (RideResponse);
+    rpc GetRidersByStation(GetRidersByStationMessage) returns (RideListResponse);
+}
+
+message CreateRideRequestMessage {
+    int32 rider_id = 1;
+    int32 station_id = 2;
+    string eta = 3; // Format: "HH:MM"
+    double destination_lat = 4;
+    double destination_lng = 5;
+}
+
+message GetRideRequestMessage {
+    int32 ride_request_id = 1;
+}
+
+message UpdateRideStatusMessage {
+    int32 ride_request_id = 1;
+    string status = 2; // "LOOKING", "MATCHED", "COMPLETED"
+}
+
+message GetRidersByStationMessage {
+    int32 station_id = 1;
+    string max_eta = 2; // Format: "HH:MM"
+}
+
+message RideResponse {
+    bool success = 1;
+    int32 ride_request_id = 2;
+    int32 rider_id = 3;
+    int32 station_id = 4;
+    string eta = 5;
+    double destination_lat = 6;
+    double destination_lng = 7;
+    string status = 8;
+    string message = 9;
+}
+
+message RideListResponse {
+    bool success = 1;
+    repeated RideResponse rides = 2;
+    int32 count = 3;
+}
+

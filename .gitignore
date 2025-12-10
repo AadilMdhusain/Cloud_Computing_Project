@@ -1,0 +1,13 @@
+BUILD_FIX_NOTES.md
+DEPLOYMENT_GUIDE.md
+DEPLOYMENT_SUCCESS.md
+K8S_DEPLOYMENT_STEPS.md
+PROJECT_COMPLETE.md
+PROJECT_OVERVIEW.md
+QUICK_START_K8S.md
+
+rabbitmq
+demo
+frontend/node_modules
+frontend/package-lock.json
+

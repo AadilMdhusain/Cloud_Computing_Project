@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-service
+  namespace: lastmile
+spec:
+  selector:
+    app: matching-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8005
+      targetPort: 8005
+    - name: grpc
+      protocol: TCP
+      port: 50055
+      targetPort: 50055
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service
+  namespace: lastmile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+    spec:
+      containers:
+      - name: matching-service
+        image: backend-matching_service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8005
+          name: http
+        - containerPort: 50055
+          name: grpc
+        env:
+        - name: DB_HOST
+          value: "postgres-matching"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "matching_db"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASSWORD
+          value: "postgres"
+        - name: RABBITMQ_URL
+          value: "amqp://admin:admin@rabbitmq:5672/"
+        - name: RIDER_SERVICE_HOST
+          value: "rider-service"
+        - name: RIDER_SERVICE_PORT
+          value: "50053"
+        - name: DRIVER_SERVICE_HOST
+          value: "driver-service"
+        - name: DRIVER_SERVICE_PORT
+          value: "50054"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+
