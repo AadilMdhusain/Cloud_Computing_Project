@@ -1,4 +1,4 @@
-# 🚗 LastMile - Metro Feeder Ride-Sharing Application
+# LastMile - Metro Feeder Ride-Sharing Application
 
 > A production-grade microservices application demonstrating auto-scaling, message queuing, and real-time geospatial matching.
 
@@ -7,11 +7,11 @@
 [![React](https://img.shields.io/badge/React-18.2+-61dafb.svg)](https://reactjs.org)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-326ce5.svg)](https://kubernetes.io)
 
-## 🎯 What is LastMile?
+## What is LastMile?
 
 LastMile connects **drivers** with **riders** at metro stations through intelligent geospatial matching. When a driver approaches a metro station, the system automatically matches them with riders heading in similar directions.
 
-### The "Golden Logic" 🌟
+### The "Golden Logic"
 
 ```
 Driver Route: Hosur → Electronic City → HSR Layout → Koromangala
@@ -29,7 +29,7 @@ Rider: Waiting at Bommanahalli, ETA 10:05
 10:08 - Rider picked up, continue to Koromangala
 ```
 
-## ⚡ Quick Start (2 minutes)
+##  Quick Start (2 minutes)
 
 ### Option 1: Docker Compose (Recommended)
 
@@ -68,7 +68,7 @@ kubectl port-forward svc/matching-service 8005:8005 -n lastmile
 python demo/seed_and_simulate.py
 ```
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌──────────────┐
@@ -92,7 +92,7 @@ python demo/seed_and_simulate.py
                               └───────────┘
 ```
 
-### 🎮 Services
+###  Services
 
 | Service | Port | Purpose | Key Feature |
 |---------|------|---------|-------------|
@@ -103,7 +103,7 @@ python demo/seed_and_simulate.py
 | Location Service | gRPC 50056 | Distance calc | 100m proximity |
 | Matching Service | 8005 | Match algorithm | **Auto-scales 1-5** |
 
-## 🌟 Key Features
+##  Key Features
 
 ### ✅ Implemented Requirements
 - ✅ **Microservices**: 6 independent services with database-per-service
@@ -117,7 +117,7 @@ python demo/seed_and_simulate.py
 - ✅ **Real-time Simulation**: Driver movement engine
 - ✅ **Golden Logic**: Exact trace implementation
 
-### 💡 Technical Highlights
+###  Technical Highlights
 - **Auto-scaling Demo**: Matching service scales based on CPU
 - **Fault Tolerance**: RabbitMQ ensures no lost matches
 - **Real-time Updates**: Live driver tracking on map
@@ -125,7 +125,7 @@ python demo/seed_and_simulate.py
 - **Interactive UI**: Click-to-draw routes on map
 - **Production Ready**: Health checks, resource limits, HPA
 
-## 📊 Demo Output
+##  Demo Output
 
 ```
 ==============================================================
@@ -158,7 +158,7 @@ python demo/seed_and_simulate.py
 ✓ The Golden Logic worked! Driver will wait at station.
 ```
 
-## 📱 Using the Application
+##  Using the Application
 
 ### As a Driver
 1. Register with role: `DRIVER`
@@ -180,7 +180,7 @@ python demo/seed_and_simulate.py
 2. Click on map to add new metro stations
 3. Monitor all active drivers
 
-## 🚀 Deployment Options
+##  Deployment Options
 
 ### Local Development (Docker Compose)
 ```bash
@@ -208,13 +208,13 @@ for i in {1..5}; do python demo/seed_and_simulate.py & done
 kubectl get hpa -n lastmile -w
 ```
 
-## 📚 Documentation
+##  Documentation
 
 - **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
 - **[PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)** - Architecture deep-dive
 - **[k8s/README.md](k8s/README.md)** - Kubernetes-specific guide
 
-## 🔍 Monitoring
+##  Monitoring
 
 ### Check Service Health
 ```bash
@@ -255,7 +255,7 @@ kubectl describe hpa matching-service-hpa -n lastmile
 | Orchestration | Kubernetes, HPA |
 | Containerization | Docker, Docker Compose |
 
-## 📦 Project Structure
+##  Project Structure
 
 ```
 LastMile/
@@ -272,7 +272,7 @@ LastMile/
 └── demo/                      # Demo script
 ```
 
-## 🎓 Learning Outcomes
+##  Learning Outcomes
 
 This project demonstrates:
 - Microservices architecture
@@ -284,7 +284,7 @@ This project demonstrates:
 - Geospatial computing
 - Event-driven architecture
 
-## 🔧 Development
+##  Development
 
 ### Prerequisites
 - Python 3.9+
@@ -313,21 +313,21 @@ python demo/seed_and_simulate.py
 # Expected output: Match found within 90 seconds
 ```
 
-## 🤝 Contributing
+## Contributing
 
 This is an academic project demonstrating cloud computing concepts.
 
-## 📄 License
+##  License
 
 Educational use only.
 
-## 👤 Author
+##  Author
 
 Built for Cloud Computing course project.
+Aadil Mohammad Husain (MT2024001)
+Prabal Singh (MT2024172)
 
----
-
-**⭐ Star this repo if you found it helpful!**
+** Star this repo if you found it helpful!**
 
 For questions: Check `DEPLOYMENT_GUIDE.md` or `PROJECT_OVERVIEW.md`
 
