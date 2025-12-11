@@ -11,11 +11,11 @@
 
 .sidebar {
   width: 350px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #385170;
   color: white;
   padding: 20px;
   overflow-y: auto;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header {
@@ -24,7 +24,7 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-header h2 {
@@ -33,7 +33,7 @@
 }
 
 .logout-btn {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -44,11 +44,11 @@
 }
 
 .logout-btn:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .user-info {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -82,7 +82,7 @@
   border: none;
   border-radius: 5px;
   font-size: 14px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .btn {
@@ -99,21 +99,21 @@
 
 .btn-primary {
   background: white;
-  color: #667eea;
+  color: #385170;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-success {
-  background: #48bb78;
-  color: white;
+  background: #9fd3c7;
+  color: #142d4c;
 }
 
 .btn-success:hover {
-  background: #38a169;
+  background: #8bc4b8;
 }
 
 .btn-danger {
@@ -131,7 +131,7 @@
 }
 
 .status-card {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 15px;
@@ -140,7 +140,7 @@
 .status-card h3 {
   font-size: 16px;
   margin-bottom: 10px;
-  color: #ffd700;
+  color: #9fd3c7;
 }
 
 .status-card p {
@@ -149,7 +149,7 @@
 }
 
 .route-list {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 15px;
   border-radius: 10px;
   max-height: 200px;
@@ -167,14 +167,14 @@
 
 .route-list li {
   padding: 8px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   margin-bottom: 5px;
   border-radius: 5px;
   font-size: 13px;
 }
 
 .instructions {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -183,7 +183,7 @@
 .instructions h3 {
   font-size: 16px;
   margin-bottom: 10px;
-  color: #ffd700;
+  color: #9fd3c7;
 }
 
 .instructions p {
@@ -191,4 +191,3 @@
   line-height: 1.6;
   margin-bottom: 8px;
 }
-
